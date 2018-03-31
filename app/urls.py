@@ -6,6 +6,9 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
+    url(r'^search/$', views.search, name='search'),
+    url(r'^quiz/$', views.quiz, name='quiz'),
+    url(r'^allwords/$', views.allwords, name='allwords'),
     url(r'^user_profile/(\d+)$',
         views.user_profile, name='user_profile'),
 ]

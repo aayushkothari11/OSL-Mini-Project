@@ -1,0 +1,14 @@
+<form action="" method="get">
+  Search <input type="text" name="search"><br>
+  <input type="submit">
+</form>
+
+{% if questions %}
+  {% for g in questions %}
+    <h1 style="display:inline;">{{g.question}} - </h1>{{g.answer}}
+    <br />
+  {% endfor %}
+{% endif %}
+{% if error %}
+  <h1>NO MATCHES FOUND</h1>
+{% endif %}

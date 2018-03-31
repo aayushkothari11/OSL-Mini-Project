@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
-from .models import UserProfile
+from .models import UserProfile, Game
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+import random
 
 
 def register(request):
@@ -83,3 +84,27 @@ def user_profile(request, id):
     client = get_object_or_404(UserProfile, id=id)
 
     return render(request, 'app/user_profile.html', {'client': client})
+
+
+@login_required(login_url='app:login')
+def allwords(request):
+    game = Game.objects.all()
+
+    return render(request, 'app/allwords.html', {'game': game})
+
+
+@login_required(login_url='app:login')
+def search(request):
+    questions = Game.objects.all()
+    if request.GET.get('search'):
+        param = request.GET.get('search')
+        questions = Game.objects.filter(question__icontains=param)
+        if not questions.exists():
+            return render(request, 'app/search.html', {'error': 'NO MATCHING QUESTIONS FOUND'})
+        return render(request, 'app/search.html', {'questions': questions})
+    return render(request, 'app/search.html', {'questions': questions})
+
+
+@login_required(login_url='app:login')
+def quiz(request):
+    print("hi")
