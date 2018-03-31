@@ -1,0 +1,12 @@
+<form method="post" action="{% url 'app:login' %}">
+                {% csrf_token %}
+                USERNAME<input type="text" name="username" required>
+                <br / >
+                PASSWORD<input type="password" name="password"required>
+
+                  {% if error %}
+                  {{ error }}
+                  {% endif %}
+              <br / >
+             <button type="submit">Login</button>
+ </form>

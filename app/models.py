@@ -1,3 +1,31 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+
+# Creating a custom path for storing the user photos
+# Example : /MEDIA_ROOT/photos/abc.jpg
+def path(instance, filename):
+    return 'photos/{0}'.format(filename)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='stud')
+    # username password fname lname email
+    photo = models.FileField(blank=True, null=True, upload_to=path)
+    Name = models.CharField(max_length=200, blank=True, null=True)
+    bio = models.CharField(max_length=200, blank=True, null=True)
+    GENDER_CHOICES = (
+        ("Male", "Male"),
+        ("Female", "Female"),
+    )
+    gender = models.CharField(
+        max_length=6, choices=GENDER_CHOICES, blank=True, null=True)
+    mobileNo = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.Name)
+
+
+class Game(models.Model):
+    question = models.CharField(max_length=200, blank=True, null=True)
+    answer = models.CharField(max_length=200, blank=True, null=True)
