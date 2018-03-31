@@ -1,0 +1,47 @@
+<h1>Play the Game</h1>
+
+<form method="post" action="{% url 'app:actualquiz' quiz.id %}">
+                {% csrf_token %}
+
+                <h3>Question 1 - {{quiz.q1}}</h3>
+                {% for choice in options1 %}
+
+                    <input type="radio" name="ques1" value="{{choice}}">
+                    <label for="">{{choice}}</label>
+                    <br />
+                {% endfor %}
+
+                <br />
+
+                <h3>Question 2 - {{quiz.q2}}</h3>
+                {% for choice in options2 %}
+
+                    <input type="radio" name="ques2" value="{{choice}}">
+                    <label for="">{{choice}}</label>
+                    <br />
+                {% endfor %}
+
+                <br />
+
+                <h3>Question 3 - {{quiz.q3}}</h3>
+                {% for choice in options3 %}
+
+                    <input type="radio" name="ques3" value="{{choice}}">
+                    <label for="">{{choice}}</label>
+                    <br />
+                {% endfor %}
+
+                <br />
+
+                <h3>Question 4 - {{quiz.q4}}</h3>
+                {% for choice in options4 %}
+
+                    <input type="radio" name="ques4" value="{{choice}}">
+                    <label for="">{{choice}}</label>
+                    <br />
+                {% endfor %}
+
+                <br />
+
+             <button type="submit">Login</button>
+ </form>

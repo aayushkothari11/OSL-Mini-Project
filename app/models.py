@@ -34,3 +34,15 @@ class Game(models.Model):
 
     def __str__(self):
         return str(self.question)
+
+
+class Quiz(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    q1 = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="q1")
+    q1selected = models.CharField(max_length=200, blank=True, null=True)
+    q2 = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="q2")
+    q2selected = models.CharField(max_length=200, blank=True, null=True)
+    q3 = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="q3")
+    q3selected = models.CharField(max_length=200, blank=True, null=True)
+    q4 = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="q4")
+    q4selected = models.CharField(max_length=200, blank=True, null=True)

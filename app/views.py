@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
-from .models import UserProfile, Game
+from .models import UserProfile, Game, Quiz
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -107,4 +107,78 @@ def search(request):
 
 @login_required(login_url='app:login')
 def quiz(request):
-    print("hi")
+    game = Game.objects.all()
+    print(game)
+    a = len(game)
+    print(a)
+    questions = []
+    while(len(questions) != 4):
+        k = random.randint(0, a-1)
+        if questions.count(game[k]) == 0:
+            questions.append(game[k])
+
+    profile = UserProfile.objects.get(user=request.user)
+    qu = Quiz.objects.create(user=profile, q1=questions[0], q2=questions[1], q3=questions[2], q4=questions[3])
+    qu.save()
+    print(qu)
+    quiz_url = '/actualquiz/' + str(qu.id)
+    return HttpResponseRedirect(quiz_url)
+
+
+@login_required(login_url='app:login')
+def actualquiz(request, id):
+    if request.method == 'POST':
+        count = 0
+        s1 = request.POST.get('ques1', '')
+        s2 = request.POST.get('ques2', '')
+        s3 = request.POST.get('ques3', '')
+        s4 = request.POST.get('ques4', '')
+        quiz = Quiz.objects.get(id=id)
+        if quiz.q1.answer == s1:
+            count = count + 1
+        if quiz.q2.answer == s2:
+            count = count + 1
+        if quiz.q3.answer == s3:
+            count = count + 1
+        if quiz.q4.answer == s4:
+            count = count + 1
+        quiz.q1selected = s1
+        quiz.q2selected = s2
+        quiz.q3selected = s3
+        quiz.q4selected = s4
+        quiz.save()
+        user = request.user
+        Profile = UserProfile.objects.get(user=user)
+        Profile.totalQues = Profile.totalQues + 4
+        Profile.totalAns = Profile.totalAns + count
+        Profile.save()
+    else:
+        quiz = Quiz.objects.get(id=id)
+        game = Game.objects.all()
+        a = len(game)
+        options1 = [quiz.q1.answer]
+        options2 = [quiz.q2.answer]
+        options3 = [quiz.q3.answer]
+        options4 = [quiz.q4.answer]
+        while(len(options1) != 4):
+            k = random.randint(0, a-1)
+            if options1.count(game[k].answer) == 0:
+                options1.append(game[k].answer)
+
+        while(len(options2) != 4):
+            k = random.randint(0, a-1)
+            if options2.count(game[k].answer) == 0:
+                options2.append(game[k].answer)
+
+        while(len(options3) != 4):
+            k = random.randint(0, a-1)
+            if options3.count(game[k].answer) == 0:
+                options3.append(game[k].answer)
+
+        while(len(options4) != 4):
+            k = random.randint(0, a-1)
+            if options4.count(game[k].answer) == 0:
+                options4.append(game[k].answer)
+
+        return render(request, 'app/quiz.html', {'quiz': quiz, 'options1': options1, 'options2': options2,
+                                                 'options3': options3, 'options4': options4})
